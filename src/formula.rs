@@ -2,9 +2,13 @@ use crate::Location;
 use std::f64::consts::PI;
 use std::fmt;
 
+const METERS_PER_MILE:f64 = 1609.344f64;
+
 /// Distance represents a physical distance in a certain unit.
 #[derive(Debug, PartialEq, Clone, Copy)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+
+
 pub struct Distance(f64);
 
 impl fmt::Display for Distance {
@@ -22,6 +26,17 @@ impl Distance {
     /// Return the distance in meters.
     pub fn meters(&self) -> f64 {
         self.0
+    }
+
+
+    /// Create a distance in miles
+    pub fn from_miles<P: Into<f64>>(m: P) -> Self {
+        Distance((m).into()* METERS_PER_MILE)
+    }
+
+    /// Retrun the distance in miles.
+    pub fn miles(&self) -> f64 {
+        self.0 / METERS_PER_MILE
     }
 }
 

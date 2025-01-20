@@ -53,6 +53,10 @@
 #![deny(missing_docs)]
 mod formula;
 
+fn round(x: f64, decimals: u32) -> f64 {
+    let y = 10i32.pow(decimals) as f64;
+    (x * y).round() / y
+}
 pub use formula::Distance;
 
 /// Location defines a point using its latitude and longitude.
@@ -129,6 +133,18 @@ mod tests {
         }
     }
 
+    #[test]
+    fn test_get_distance_miles() {
+        let l1 = Location::new(27.740068, 85.337576);
+        let l2 = Location::new(27.740286, 85.337059);
+
+        match l1.distance_to(&l2) {
+            Ok(distance) => {
+                assert_eq!(round(distance.miles(), 3), 0.035);
+            }
+            Err(e) => panic!("Failed: {:?}", e),
+        }
+    }
     #[test]
     fn test_get_distance_haversine() {
         let l1 = Location::new(27.740068, 85.337576);
